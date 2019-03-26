@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.springboot.mapper.StudentMapper">
+  <resultMap id="BaseResultMap" type="com.test.springboot.pojo.Student">
+    <result column="stuId" jdbcType="INTEGER" property="stuid" />
+    <result column="stuName" jdbcType="VARCHAR" property="stuname" />
+    <result column="stuSex" jdbcType="INTEGER" property="stusex" />
+  </resultMap>
+
+  <!--查询Student表中所有行信息-->
+  <select id="getAll" resultMap="BaseResultMap">
+    select stuid,stuname,stusex from Student
+  </select>
+  <!--根据Student表主键更新表数据-->
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.springboot.pojo.Student">
+    update Student
+    <set>
+      <if test="stuid != null" >
+        stuId=#{stuid},
+      </if>
+      <if test="stuname != null" >
+        stuName=#{stuname},
+      </if>
+      <if test="stusex != null" >
+        stuSex = #{stusex}
+      </if>
+    </set>
+    where stuId = #{stuid}
+</update>
+
+  <insert id="insert" parameterType="com.test.springboot.pojo.Student">
+    insert into Student (stuId, stuName, stuSex
+      )
+    values (#{stuid,jdbcType=INTEGER}, #{stuname,jdbcType=VARCHAR}, #{stusex,jdbcType=INTEGER}
+      )
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.test.springboot.pojo.Student">
+    insert into Student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stuid != null">
+        stuId,
+      </if>
+      <if test="stuname != null">
+        stuName,
+      </if>
+      <if test="stusex != null">
+        stuSex,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stuid != null">
+        #{stuid,jdbcType=INTEGER},
+      </if>
+      <if test="stuname != null">
+        #{stuname,jdbcType=VARCHAR},
+      </if>
+      <if test="stusex != null">
+        #{stusex,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+</mapper>
